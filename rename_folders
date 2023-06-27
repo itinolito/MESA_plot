@@ -1,0 +1,11 @@
+#!/bin/bash
+local_sim='/Users/nunina/MESA/Simulations/'
+
+if [ $# -gt 0 ]; then
+    for i in $*; do
+        cd $local_sim/$i && mv LOGS_1 preZAMS && mv LOGS_2 MS && mv LOGS_3 RG && mv LOGS_4 AGB && mv LOGS_5 TPAGB
+    done
+else
+    echo "The right usage is ./script FOLDER_TO_COPY"
+fi
+
