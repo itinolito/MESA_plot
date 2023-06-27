@@ -5,10 +5,11 @@ import sys
 
 def main():
     sim_folder = '/Users/nunina/MESA/Simulations/'
-    folder = sim_folder+sys.argv[i+1]
-    to_plot = gfm.generate_file_models(sim_folder + folder)
+    folder = sim_folder+sys.argv[1]
+    to_plot = gfm.generate_file_models(folder)
     mh.all_time(to_plot)
-    plt.show()
+    plt.savefig(folder+'.png')
+    #plt.show()
 
 if __name__ == '__main__':
     main()
