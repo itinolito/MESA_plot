@@ -1,10 +1,7 @@
 from lzma import MODE_NORMAL
 import mesa_reader as mr
-import mesaPlot as mp
-from astropy import constants as const
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-import numpy as np
 
 plt.style.use('/Users/nunina/MESA/Simulations/MESA_plot/aesthetic.mplstyle')
 
@@ -357,38 +354,7 @@ def one_profile_plot(file_models, profile):
     ax.set_xlabel("$m/M_\odot$")
     ax.set_title("Tidal radius profile for a $1M_\odot$ pre-ZAMS RG at time $R=10R_\odot$")
 
-#-------------------------------------------------#
-#--------------FIND PARTICULAR MODEL--------------#
-#-------------------------------------------------#
 
-def has_rg_radius(logR):
-    return logR > 1.3
-
-def has_large_lum(logL):
-    return logL > 1
-
-def find_models_function(function,parameter,file_models):
-    my_models = file_models.copy()
-    for name, simulations in my_models.items():
-        for file_model in simulations:
-            mesa_param_obj = mr.MesaLogDir(file_model['folder_path'])
-            file_model['models'] = mesa_param_obj.select_models(function, parameter).tolist()
-    return my_models
-
-def find_data_model(function,parameter,file_models,my_data):
-    my_models = find_models_function(function,parameter,file_models)
-
-    my_models_data = {}
-    for name,stages in my_models.items():
-        stage_data = aggregate_data(stages)
-        my_models_data[name] = stage_data
-
-    found_info = {}
-    for star_name, stages in my_models_data.items():
-        found_info[star_name] = {}
-        for folder_name,data in stages.items():
-            found_info[star_name] = data[my_data]
-    return found_info
 
 
 
