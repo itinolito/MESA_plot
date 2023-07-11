@@ -1,0 +1,12 @@
+#!/bin/bash
+cluster_sim='/sci/labs/tsvi/nuria.nav/Simulations/MS'
+local_sim='/Users/nunina/MESA/Simulations/MS'
+
+folders="3M1Z 3M01Z 2M1Z 2M01Z 1.5M1Z 1.5M01Z 1M1Z 1M01Z 0.8M01Z"
+specific="LOGS_stop_at_RG"
+
+for folder in $folders;
+do
+cd $local_sim/$folder/strip01 && mkdir $specific && rsync -ave "ssh -p 12345" nuria.nav@localhost:$cluster_sim/$folder/$specific/history.data $local_sim/$folder/strip01/$specific/history.data
+done
+

@@ -335,6 +335,28 @@ def all_time(file_models):
     #ax2.set_xlim(1.2e10,1.25e10)
     #ax4.set_xlim(1.2e10,1.25e10)
 
+def all_time_reduced(file_models):
+    fig = plt.figure(constrained_layout = True)
+    fig.suptitle('Evolution with time')
+    spec = gridspec.GridSpec(ncols=3, nrows=2, figure=fig)
+    ax1 = fig.add_subplot(spec[0, 1:])
+    ax2 = fig.add_subplot(spec[1, 1:])
+    ax3 = fig.add_subplot(spec[0:,0])
+    ax3.invert_xaxis()
+    
+    all_data = merge_all_data(file_models)
+
+    for folder_name,data in all_data.items():
+        radius_time(data,folder_name,ax1)
+        lum_time(data,folder_name,ax2)
+        lum_temp_hr(data,folder_name,ax3)
+    ax1.legend(fontsize="x-small")
+    ax2.legend(fontsize="x-small")
+    ax3.legend(fontsize="x-small")
+
+    #ax1.set_xlim(1.2e10,1.25e10)
+    #ax2.set_xlim(1.2e10,1.25e10)
+    #ax4.set_xlim(1.2e10,1.25e10)
 
 def one_profile_plot(file_models, profile):
     # Plot one profile from a dictionary that contains folder_path, name and list of models.

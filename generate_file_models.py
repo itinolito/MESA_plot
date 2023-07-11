@@ -1,5 +1,5 @@
 import glob
-
+import re
 
 def sorter(string):
     sort_order = {
@@ -7,11 +7,12 @@ def sorter(string):
         'MS' : 2,
         'RG' : 3,
         'AGB' : 4,
-        'TPAGB' : 5
+        'TPAGB' : 5,
+        'WD' : 6
     }
     max_value = max(sort_order.values())
-    folder_name = string.split('/')[-2]
-
+    #folder_name = string.split('/')[-2]
+    folder_name = re.split('/|_',string)[-2]
     return sort_order.get(folder_name, max_value + 1)
 
 
