@@ -1,5 +1,5 @@
 #!/bin/bash
-local_sim='/Users/nunina/MESA/Simulations/'
+local_sim='/Users/nunina/MESA/Simulations/ALL/temp_res/'
 
 if [ $# -gt 0 ]; then
     for i in $*; do

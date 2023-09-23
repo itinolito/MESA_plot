@@ -1,6 +1,6 @@
 #!/bin/bash
-cluster_sim='/sci/labs/tsvi/nuria.nav/Simulations/'
-local_sim='/Users/nunina/MESA/Simulations/'
+cluster_sim='/sci/labs/tsvi/nuria.nav/Simulations/ALL'
+local_sim='/Users/nunina/MESA/Simulations/ALL'
 
 if [ $# -eq 1 ]; then
     cd $local_sim && mkdir -p $1 && rsync -ave "ssh -p 12345" --include='history.data' --include='*/' --exclude='*' --prune-empty-dirs nuria.nav@localhost:$cluster_sim/$1/ $local_sim/$1

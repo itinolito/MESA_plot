@@ -2,6 +2,9 @@ from lzma import MODE_NORMAL
 import mesa_reader as mr
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+import numpy as np
+from astropy import units as u
+from astropy import constants as ct
 
 plt.style.use('/Users/nunina/MESA/Simulations/MESA_plot/aesthetic.mplstyle')
 
@@ -41,7 +44,16 @@ def get_params(p):
             'o16': p.center_o16,
             'mass_h': p.total_mass_h1,
             'mass_he': p.total_mass_he4,
-            'log_Teff' : p.log_Teff
+            'log_Teff' : p.log_Teff,
+            'mass_conv_core' : p.mass_conv_core,
+            'conv_mx1_top' : p.conv_mx1_top,
+            'conv_mx1_bot' : p.conv_mx1_bot,
+            'conv_mx2_top' : p.conv_mx2_top,
+            'conv_mx2_bot' : p.conv_mx2_bot,
+            'mx1_top' : p.mx1_top,
+            'mx1_bot' : p.mx1_bot,
+            'mx2_top' : p.mx2_top,
+            'mx2_bot' : p.mx2_bot
         }
     else:
     #   Star parameters FOR PARTICULAR PROFILE OR MODEL
@@ -122,6 +134,15 @@ def radius_time(data, name, plt):
     plt.plot(data['age'],data['radius'], label = "{stage}".format(stage=name))
     plt.set_ylabel("$r/R_\odot$")
 
+def beautiful_radius_time(data, name, plt):
+    plt.set_yscale("log")
+    x = data['age']
+    y = data['radius']
+    plt.plot(x,y, label = "{stage}".format(stage=name))
+    plt.set_ylabel("$r/R_\odot$")
+    plt.fill_between(x,y,alpha=.1)
+
+
 def temp_time(data, name, plt):
     plt.plot(data['age'],data['log_Teff'], label = "{stage}".format(stage=name))
     plt.set_ylabel("$\log_{10} T_{\\textit{eff}}$")
@@ -161,6 +182,45 @@ def nuc_time(data, name, plt):
     plt.plot(data['age'],data['trialpha'], label="$3-alpha$ {stage}".format(stage=name))
     plt.set_ylabel("$\log_{\ 10} (L/L_{\odot})$")
     
+def resolution_hr(data, name, plt):
+    x = data['log_Teff']
+    y = data['log_luminosity']
+    plt.plot(x,y, lw=0.5, label = "{stage}".format(stage=name))#, marker='.', markevery=[0])        
+    if name == "MS":
+        plt.plot(x[0],y[0], 'yo')
+    plt.grid(False)
+    plt.set_ylabel("$\log_{\ 10}(L/L_\odot)$ ")
+    plt.set_xlabel("$\log_{10} T_{\\textit{eff}}$ ")
+
+
+def beautiful_hr(data, name, plt):
+    x = data['log_Teff']
+    y = data['log_luminosity']
+    f = data['h1']
+
+    # This creates the points as an N x 1 x 2 array so that we can stack points
+    # together easily to get the segments. The segments array for line collection
+    # needs to be (numlines) x (points per line) x 2 (for x and y)
+    points = np.array([x, y]).T.reshape(-1, 1, 2)
+    segments = np.concatenate([points[:-1], points[1:]], axis=1)
+
+
+    # Create a continuous norm to map from data points to colors
+    norm = plt.Normalize(f.min(), f.max())
+    lc = LineCollection(segments, cmap='viridis', norm=norm)
+    # Set the values used for colormapping
+    lc.set_array(f)
+    lc.set_linewidth(2)
+    line = plt.add_collection(lc)
+    plt.colorbar(line, ax=plt)
+
+    plt.plot(x,y, lw=0.5, label = "{stage}".format(stage=name))#, marker='.', markevery=[0])        
+    if name == "MS":
+        plt.plot(x[0],y[0], 'yo')
+    plt.grid(False)
+    plt.set_ylabel("$\log_{\ 10}(L/L_\odot)$ ")
+    plt.set_xlabel("$\log_{10} T_{\\textit{eff}}$ ")
+
 
 #-------------------------------------------------#
 #----------------- PROFILE PLOTS -----------------#
@@ -348,7 +408,8 @@ def all_time_reduced(file_models):
 
     for folder_name,data in all_data.items():
         radius_time(data,folder_name,ax1)
-        lum_time(data,folder_name,ax2)
+        #lum_time(data,folder_name,ax2)
+        temp_time(data,folder_name,ax2)
         lum_temp_hr(data,folder_name,ax3)
     ax1.legend(fontsize="x-small")
     ax2.legend(fontsize="x-small")
@@ -375,7 +436,6 @@ def one_profile_plot(file_models, profile):
 #    ax.axvspan(stripping_mass_1M_10R['Retain 0.2'],stripping_mass_1M_10R['Retain 0.3'], color="indianred", alpha=0.2,lw=0)
     ax.set_xlabel("$m/M_\odot$")
     ax.set_title("Tidal radius profile for a $1M_\odot$ pre-ZAMS RG at time $R=10R_\odot$")
-
 
 
 

@@ -5,7 +5,7 @@ import sys
 
 def main():
 
-    sim_folder = '/Users/nunina/MESA/Simulations/MS/'
+    sim_folder = '/Users/nunina/MESA/Simulations/ALL/temp_res/'
     folders = []
     for i in range(len(sys.argv)-1):
         folder = sim_folder+sys.argv[i+1]
