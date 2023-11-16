@@ -8,7 +8,7 @@ from astropy import constants as ct
 
 plt.style.use('/Users/nunina/MESA/Simulations/MESA_plot/aesthetic.mplstyle')
 
-history=True
+history=False
 
 def get_file(file,model):
     if history:
@@ -63,20 +63,20 @@ def get_params(p):
             'age' : p.star_age,
             'log_density' : p.logRho,
             'log_temp' : p.logT,
-            'luminosity' : p.luminosity,
+            #'luminosity' : p.luminosity,
             'hydrogen' : p.x_mass_fraction_H,
             'helium' : p.y_mass_fraction_He,
             'pp' : p.pp,
             'cno' : p.cno,
             'trialpha' : p.tri_alpha,
-            'h1' : p.h1,
-            'he3' : p.he3,
-            'he4' : p.he4,
-            'c12' : p.c12,
-            'n14' : p.n14,
-            'o16' : p.o16,
-            'ne20' : p.ne20,
-            'mg24' : p.mg24,
+            #'h1' : p.h1,
+            #'he3' : p.he3,
+            #'he4' : p.he4,
+            #'c12' : p.c12,
+            #'n14' : p.n14,
+            #'o16' : p.o16,
+            #'ne20' : p.ne20,
+            #'mg24' : p.mg24,
         }
     #    fe56=p.fe56
     #    ni58=p.ni58 
@@ -172,8 +172,9 @@ def lum_temp_hr(data, name, plt):
     plt.plot(data['log_Teff'],data['log_luminosity'], label = "{stage}".format(stage=name))#, marker='.', markevery=indices)
 #    for i in indices[::2]:
 #        plt.text(data['log_Teff'][i],data['log_luminosity'][i],"{:.4}".format(age[i]/1e10))
-    plt.set_ylabel("$\log_{\ 10}(L/L_\odot)$ ")
-    plt.set_xlabel("$\log_{10} T_{\\textit{eff}}$ ")
+    #plt.set_ylabel("$\log_{\ 10}(L/L_\odot)$ ")
+    #plt.set_xlabel("$\log_{10} T_{\\textit{eff}}$ ")
+    plt.legend(fontsize="xx-small")
 
 def nuc_time(data, name, plt):
     plt.set_yscale("log")
@@ -191,7 +192,6 @@ def resolution_hr(data, name, plt):
     plt.grid(False)
     plt.set_ylabel("$\log_{\ 10}(L/L_\odot)$ ")
     plt.set_xlabel("$\log_{10} T_{\\textit{eff}}$ ")
-
 
 def beautiful_hr(data, name, plt):
     x = data['log_Teff']
@@ -221,6 +221,10 @@ def beautiful_hr(data, name, plt):
     plt.set_ylabel("$\log_{\ 10}(L/L_\odot)$ ")
     plt.set_xlabel("$\log_{10} T_{\\textit{eff}}$ ")
 
+def he_time(data, name, plt):
+    plt.plot(data['age'],data['he_core_mass'], label = "{stage}".format(stage=name))#, marker='.', markevery=indices)
+    plt.set_ylabel("$he_core$ ")
+    plt.set_xlabel("age ")
 
 #-------------------------------------------------#
 #----------------- PROFILE PLOTS -----------------#
@@ -234,10 +238,6 @@ def density_radius(data,model,plt):
     plt.plot(data['radius'],data['log_density'], label="model {}".format(model))
     plt.set_xlabel("$r/R_\odot$")
     plt.set_ylabel("$\log_{\ 10} \; \left(ρ/ρ_\odot\\right)$")
-
-def radius_mass(data,model,name,plt):
-    plt.plot(data['mass'],data['radius'], label="model {model_num} of {sim}".format(model_num=model, sim=name))
-    plt.set_ylabel("$r/R_\odot$")
     
 def elements_radius(data,model,plt):
     plt.set_title("Elements for model {}".format(model))
@@ -264,13 +264,34 @@ def tidal_radius_radius(data,model,plt):
     plt.set_xlabel("$r/R_\odot$")
     plt.set_ylabel("$\\frac{ r}{M^{1/3}(r)}$")
 
+def tidal_radius_mass_fraction(data,plt, bh_mass, name):
+    #plt.set_xscale("log")
+    plt.set_yscale("log")
+    total_mass = data["mass"][0]
+    x = 1 - data["mass"]/total_mass
+    tr_rsun = (data['radius']*(bh_mass/data['mass'])**(1/3))*u.R_sun
+    
+    mass = (bh_mass*u.M_sun).to('kg')
+    
+    r_g = ct.G*mass/(ct.c)**2
+
+    y = (tr_rsun.to('m'))/r_g
+
+    
+    plt.plot(x,y, label="{}".format(name))
+    plt.set_xlim([-0.049,1.049])
+    plt.legend(fontsize="x-small", loc="upper right")
+
+
 #----------------- PROFILE / MASS ----------------#
+def radius_mass(data,model,name,plt):
+    plt.plot(data['mass'],data['radius'], label=name, lw=0.8)
+    plt.set_ylabel("$r/R_\odot$")
 
 def density_mass(data,model,name,plt):
 #    plt.set_title("Density profile of a $1M_\odot$ ZAMS red giant")
-    plt.plot(data['mass'],data['log_density'], label="model {model_num} of {sim}".format(model_num=model, sim=name))
-    plt.set_ylabel("$\log_{\ 10} \; \left(ρ/ρ_\odot\\right)$")
-    plt.legend()
+    plt.plot(data['mass'],data['log_density'], label=name, lw=0.8)
+    plt.set_ylabel("$\log_{\ 10} \; \left(\\rho/\\rho_\odot\\right)$")
      
 def elements_mass(data,model,name,plt):
 #    plt.set_title("Elements for model {}".format(model))
@@ -304,7 +325,7 @@ def tidal_radius_mass(data,model,name,plt):
 #    plt.xscale("log")
 #    plt.yscale("log")
     y=data['radius']/(data['mass'])**(1/3)
-    plt.plot(data['mass'],y, label="model {model_num} of {sim}".format(model_num=model, sim=name))
+    plt.plot(data['mass'],y, label=name)
     plt.set_ylabel("$r/m^{1/3}$")
 
 def nuc_energy(data,model,name,plt):
@@ -318,26 +339,35 @@ def nuc_energy(data,model,name,plt):
 #-------------PLOT A BUNCH OF STUFF---------------#
 #-------------------------------------------------#
 
-def plot_profile_mass(file_models):
-    fig, ax = plt.subplots(2,2, figsize=(10, 6))    
+def plot_profile_mass(file_models,labeldata):
+    fig = plt.figure()
     fig.suptitle('Profiles')
+    #spec = gridspec.GridSpec(ncols=3, nrows=3, figure=fig)
+    ax1 = fig.add_subplot(2,1,1)
+    ax2 = fig.add_subplot(2,1,2)
+
+    #ax1 = fig.add_subplot(spec[0, :])
+    #ax2 = fig.add_subplot(spec[1, :])
+    #ax3 = fig.add_subplot(spec[2,:])
 
     for name, simulations in file_models.items():
         simulations_data = aggregate_data(simulations)
 
         for folder_name, models_data in simulations_data.items():
+            all_labels = alt_label_parser(folder_name,labeldata)
+            my_label = all_labels[0]
             for model,data in models_data.items():
-                density_mass(data,model,name,ax[0,0])
-                #temp_mass(data,model,folder_name,ax[0,1])
-                radius_mass(data,model,name,ax[0,1])
-                #elements_mass(data,model,folder_name,ax[1,0])
-                nuc_energy(data,model,name,ax[1,0])
-                tidal_radius_mass(data,model,name,ax[1,1])
+                #import ipdb; ipdb.set_trace()
+                density_mass(data,model,my_label,ax1)
+                radius_mass(data,model,my_label,ax2)
+    handles, labels = ax1.get_legend_handles_labels()
+    leg = fig.legend(handles, labels, fontsize="x-small", loc="right")
+    fig.subplots_adjust(right=0.8)
+    fig.supxlabel('m [$M_\odot$]')
+    fig.suptitle('Profiles for '+all_labels[1])
+    for legobj in leg.legendHandles:
+        legobj.set_linewidth(1.5)
 
-    ax[0,0].legend(fontsize="x-small")
-    ax[1,0].legend(fontsize="x-small")
-    ax[0,1].legend(fontsize="x-small")
-    ax[1,1].legend(fontsize="x-small")
 
 def plot_time(file_models):
     fig = plt.figure(constrained_layout = True)
@@ -371,31 +401,27 @@ def plot_time(file_models):
 def all_time(file_models):
     fig = plt.figure(constrained_layout = True)
     fig.suptitle('Evolution with time')
-    spec = gridspec.GridSpec(ncols=3, nrows=3, figure=fig)
-    ax1 = fig.add_subplot(spec[0, :])
+    spec = gridspec.GridSpec(ncols=3, nrows=2, figure=fig)
+    ax1 = fig.add_subplot(spec[0, 1:])
     ax2 = fig.add_subplot(spec[1, 1:])
-    ax3 = fig.add_subplot(spec[1:,0])
+    ax3 = fig.add_subplot(spec[0:,0])
     ax3.invert_xaxis()
-    ax4 = fig.add_subplot(spec[-1,1:])
     
     all_data = merge_all_data(file_models)
 
     for folder_name,data in all_data.items():
         radius_time(data,folder_name,ax1)
-        lum_time(data,folder_name,ax2)
-        #nuc_time(data,folder_name,ax4)
-        temp_time(data,folder_name,ax4)
+        temp_time(data,folder_name,ax2)
         lum_temp_hr(data,folder_name,ax3)
     ax1.legend(fontsize="x-small")
     ax2.legend(fontsize="x-small")
     ax3.legend(fontsize="x-small")
-    ax4.legend(fontsize="x-small")
 
     #ax1.set_xlim(1.2e10,1.25e10)
     #ax2.set_xlim(1.2e10,1.25e10)
     #ax4.set_xlim(1.2e10,1.25e10)
 
-def all_time_reduced(file_models):
+def all_time_reduced(file_models, strip_model):
     fig = plt.figure(constrained_layout = True)
     fig.suptitle('Evolution with time')
     spec = gridspec.GridSpec(ncols=3, nrows=2, figure=fig)
@@ -411,6 +437,16 @@ def all_time_reduced(file_models):
         #lum_time(data,folder_name,ax2)
         temp_time(data,folder_name,ax2)
         lum_temp_hr(data,folder_name,ax3)
+        
+    stripped = merge_all_data(strip_model)    
+    data_strip=stripped['strip']
+    temp_strip = data_strip['log_Teff'][-1]
+    lum_strip = data_strip['log_luminosity'][-1]
+    rad_strip = data_strip['radius'][-1]
+    time_strip = data_strip['age'][-1]
+    ax1.plot(time_strip,rad_strip, 'ro', markersize=3)
+    ax2.plot(time_strip,temp_strip, 'ro', markersize=3)
+    ax3.plot(temp_strip,lum_strip, 'ro', markersize=3)
     ax1.legend(fontsize="x-small")
     ax2.legend(fontsize="x-small")
     ax3.legend(fontsize="x-small")
@@ -437,54 +473,37 @@ def one_profile_plot(file_models, profile):
     ax.set_xlabel("$m/M_\odot$")
     ax.set_title("Tidal radius profile for a $1M_\odot$ pre-ZAMS RG at time $R=10R_\odot$")
 
+#----
 
+def label_parser(string, data):
+    if "normal" in string:
+        pieces = string.split("/")
+        row_name = pieces[1]+'/050he/normal'
+        row_data = data[data["Path"] == row_name]
+    else:
+        row_data = data[data["Path"] == string]
+    #import ipdb; ipdb.set_trace()
+    total_mass = float(row_data['Total mass'])
+    core_mass = float(row_data['Core mass'])
+    progenitor_mass = float(row_data['Progenitor mass'])
+    he = float(row_data['%He at stripping'])
+    dot_label= "{:.2f}m{:.2f}c{:.1f}p{:.2f}he".format(total_mass,core_mass,progenitor_mass,he)
+    label = "".join(dot_label.split("."))
+    return label
 
-
-#-------------------------------------------------#
-#-----------------ACTUAL PROGRAM------------------#
-#-------------------------------------------------#
-
-#plot_profile_mass(file_models)
-#plot_time(file_models)
-#plot_time(stripping_1M_5r)
-#all_time(strip_3M_20r)
-#one_profile_plot(rg_at_10r,tidal_radius_mass)
-#print(find_models_function(has_rg_radius,'log_R',three_solar_mass))
-#print(find_data_model(has_rg_radius,'log_R',three_solar_mass,'age'))
-
-#plt.savefig('test.png')
-#print(find_models_function(has_rg_radius,'log_R',file_models))
-#print(find_data_model(has_rg_radius,'log_R',file_models,'age'))
-
-
-#one_file_path = file_models['Main sequence'][0]['folder_path']
-
-
-#file = get_file(one_file_path,100)
-#data = get_params(file)
-#fig = plt.figure(constrained_layout = True)
-#spec = gridspec.GridSpec(ncols=3, nrows=3, figure=fig)
-#ax1 = fig.add_subplot(spec[0, :])
-#ax2 = fig.add_subplot(spec[1, 1:])
-#ax3 = fig.add_subplot(spec[1:,0])
-#ax3.invert_xaxis()
-#ax4 = fig.add_subplot(spec[-1,1:])
-#
-#radius_time(data,"MS",ax1)
-#lum_time(data,"MS",ax2)
-#nuc_time(data,"MS",ax4)
-#lum_temp_hr(data,"MS",ax3)
-
-#stripping_time_filepath = '/home/nuria/Simulations/At_mid_RG/At_10R/1M_stop_at_10R/LOGS_to_RG_10R'
-#p = get_file(stripping_time_filepath,920)
-#data = get_params(p)
-#
-#fig = plt.figure()
-#spec = gridspec.GridSpec(ncols=1, nrows=1, figure=fig)
-#plot = fig.add_subplot(spec[0, 0])
-#plot.set_title('Newtonian tidal radius at stripping time')
-#plot.set_xlabel('$m/M_\odot$')
-#tidal_radius_mass(data,920,'Stripping time',plot)
-#plt.show()
-
-#Plot newtonian tidal radius at the stripping point
+def alt_label_parser(string, data):
+    if "normal" in string:
+        pieces = string.split("/")
+        row_name = pieces[1]+'/050he/normal'
+        row_data = data[data["Path"] == row_name]
+    else:
+        row_data = data[data["Path"] == string]
+    #import ipdb; ipdb.set_trace()
+    total_mass = float(row_data['Total mass'])
+    core_mass = float(row_data['Core mass'])
+    progenitor_mass = float(row_data['Progenitor mass'])
+    he = float(row_data['%He at stripping'])
+    dot_label= "{:.2f}m{:.2f}c".format(total_mass,core_mass)
+    label = "".join(dot_label.split("."))
+    common_label = "{:.1f}$M_\odot$ stripped at {:.2f} He fraction".format(progenitor_mass,he)
+    return label, common_label

@@ -1,9 +1,10 @@
 #!/bin/bash
-local_sim='/Users/nunina/MESA/Simulations/MS'
-folders="3M1Z 3M01Z 2M1Z 2M01Z 1.5M1Z 1.5M01Z 1M1Z 1M01Z 0.8M01Z"
+local_sim='/Users/nunina/MESA/Simulations/ALL/def/'
+#folders="3M1Z 3M01Z 2M1Z 2M01Z 1.5M1Z 1.5M01Z 1M1Z 1M01Z 0.8M01Z"
+folders="1.5M01Z"
 
 for folder in $folders; do
-    cd $local_sim/$folder && mkdir normal && rm -rf LOGS_1 && rm -rf LOGS_2 && mv LOGS_3 normal/RG && mv LOGS_4 normal/AGB && mv LOGS_5 normal/TPAGB && mkdir strip01 && mv LOGS_strip01* strip01 && mkdir strip02 && mv LOGS_strip02* strip02 && mkdir strip03 && mv LOGS_strip03* strip03 && mkdir strip04 && mv LOGS_strip04* strip04 && mkdir strip05 && mv LOGS_strip05* strip05  
+    cd $local_sim/$folder && rm -f re && rm -f README* && rm -f *.py && rm -rf src && rm -f clean && rm -f *.yml && rm -f inlist* && rm -f rn* && rm -f mk && rm -rf photos && rm -rf make && rm -f star && rm -f slurm* && rm -rf .mesa_temp_cache && rm -f *.mod && mkdir normal && mv preZAMS normal/preZAMS && mv ZAMS normal/MS && mv RG normal/RG && mv AGB normal/AGB && mv TPAGB normal/TPAGB && mkdir strip0 && mv s0_* strip0 && mkdir strip02 && mv s02* strip02 && mkdir strip04 && mv s04* strip04 && mkdir strip06 && mv s06* strip06 && mkdir strip08 && mv s08* strip08 && mkdir strip1 && mv s1_* strip1 && mkdir strip1.2 && mv s1.2* strip1.2 
 done
 
 

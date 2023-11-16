@@ -11,7 +11,8 @@ import matplotlib.patheffects as pe
 pi = np.pi
 sigma = ct.sigma_sb.to('Lsun/(K4 Rsun2)')
 
-sim_path = ['/Users/nunina/MESA/Simulations/ALL/1M1Z_default_res/','/Users/nunina/MESA/Simulations/ALL/1M1Z_default/']
+sim_path = ['/Users/nunina/MESA/Simulations/ALL/def/1M1Z_hr']
+#sim_path = ['/Volumes/NO NAME/Simulations/1M01Z']
 
 stages_separated = gfm.generate_file_models(sim_path[0])
 each_stage = {}
@@ -24,7 +25,7 @@ file_models = gfm.generate_multiple_sim(sim_path)
 all_data = mh.merge_all_data(file_models)
 
 fig = plt.figure(constrained_layout = True)
-fig.suptitle('HR Diagram')
+fig.suptitle('HR diagram of a $1M_\odot$, $1Z_\odot$ star')
 spec = gridspec.GridSpec(ncols=1, nrows=1, figure=fig)
 ax = fig.add_subplot(spec[:, :])
 ax.invert_xaxis()
@@ -78,14 +79,43 @@ for folder_name, data in all_data.items():
     fig.colorbar(line, ax=ax, label="Center H1")
     ax.plot(x,y, lw=0, label = "{stage}".format(stage=folder_name))#, marker='.', markevery=[0])        
 
+zams=each_stage['MS']
+x = zams['log_Teff'][0]
+y = zams['log_luminosity'][0]
+ax.plot(x,y, 'ro', markersize=3)
+ax.annotate("ZAMS",xy=(x,y),xycoords='data',xytext=(-50,-20),textcoords='offset points',arrowprops=dict(arrowstyle="->",connectionstyle="arc3,rad=-0.2"))
+
+rg=each_stage['RG']
+x = rg['log_Teff'][0]
+y = rg['log_luminosity'][0]
+ax.plot(x,y, 'ro', markersize=3)
+ax.annotate("RG",xy=(x,y),xycoords='data',xytext=(-50,-10),textcoords='offset points',arrowprops=dict(arrowstyle="->",connectionstyle="arc3,rad=-0.2"))
+
+agb=each_stage['AGB']
+x = agb['log_Teff'][0]
+y = agb['log_luminosity'][0]
+ax.plot(x,y, 'ro', markersize=3)
+ax.annotate("AGB",xy=(x,y),xycoords='data',xytext=(-70,-20),textcoords='offset points',arrowprops=dict(arrowstyle="->",connectionstyle="arc3,rad=-0.2"))
 
 
-for stage, data in each_stage.items():
-    x = data['log_Teff'][0]
-    y = data['log_luminosity'][0]
-    ax.plot(x,y, 'ro', markersize=3)
-    ax.annotate("{stage}".format(stage=stage),xy=(x,y),xycoords='data',xytext=(-50,-20),textcoords='offset points',arrowprops=dict(arrowstyle="->",connectionstyle="arc3,rad=-0.2"))
+tpagb=each_stage['TPAGB']
+x = tpagb['log_Teff'][0]
+y = tpagb['log_luminosity'][0]
+ax.plot(x,y, 'ro', markersize=3)
+ax.annotate("TPAGB",xy=(x,y),xycoords='data',xytext=(-70,-10),textcoords='offset points',arrowprops=dict(arrowstyle="->",connectionstyle="arc3,rad=-0.2"))
 
+x = tpagb['log_Teff'][-1]
+y = tpagb['log_luminosity'][-1]
+ax.plot(x,y, 'ro', markersize=3)
+ax.annotate("WDCS",xy=(x,y),xycoords='data',xytext=(30,-20),textcoords='offset points',arrowprops=dict(arrowstyle="->",connectionstyle="arc3,rad=-0.2"))
+
+#
+#for stage, data in each_stage.items():
+#    x = data['log_Teff'][0]
+#    y = data['log_luminosity'][0]
+#    ax.plot(x,y, 'ro', markersize=3)
+#    ax.annotate("{stage}".format(stage=stage),xy=(x,y),xycoords='data',xytext=(-50,-20),textcoords='offset points',arrowprops=dict(arrowstyle="->",connectionstyle="arc3,rad=-0.2"))
+#
 ax.set_ylabel("$\log_{\ 10}(L/L_\odot)$ ")
 ax.set_xlabel("$\log_{10} T_{\\textit{eff}}$ ")
 
@@ -93,5 +123,5 @@ ax.set_ylim(top=4, bottom=-1.2)
 ax.set_xlim(right=3.4, left=5.1)
 
 
+#plt.savefig('/Users/nunina/MESA/fig/1M1Z_hr.png')
 plt.show()
-

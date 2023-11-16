@@ -48,7 +48,6 @@ def generate_multiple_sim(paths):
     for path in paths:
         find_history_files = glob.glob(path + "/**/history.data", recursive=True)
         sort_history_files = sorted(find_history_files, key=sorter)
-
         file_names = [
             a.split('/')[-2] for a in sort_history_files
         ]
@@ -56,7 +55,7 @@ def generate_multiple_sim(paths):
         '/'.join(name.split('/')[:-1]) for name in sort_history_files
         ]
 
-        sim_name = path.split('/')[-1]
+        sim_name = "/".join(path.split('/')[-3:])
 
         models = [1000,10476]
         file_models[sim_name] = []

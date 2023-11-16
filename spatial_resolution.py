@@ -5,9 +5,9 @@ import matplotlib.gridspec as gridspec
 
 
 
-sim_path = '/Users/nunina/MESA/Simulations/ALL/spatial_resolution/'
+sim_path = '/Users/nunina/MESA/Simulations/ALL/def/0.8M01Z/'
 #specific = ['1M1Z04','1M1Z06','1M1Z08','1M1Z1','1M1Z1.2','1M1Z1.4','1M1Z1.6','1M1Z1.8','1M1Z2']
-specific = ['1M1Z04', '1M1Z06','1M1Z08']
+specific = ['mesh08']
 
 paths_list = [ sim_path+i for i in specific ]    
 file_models = gfm.generate_multiple_sim(paths_list)
