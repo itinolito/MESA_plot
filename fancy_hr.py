@@ -11,8 +11,8 @@ import matplotlib.patheffects as pe
 pi = np.pi
 sigma = ct.sigma_sb.to('Lsun/(K4 Rsun2)')
 
-sim_path = ['/Users/nunina/MESA/Simulations/ALL/def/1M1Z_hr']
-#sim_path = ['/Volumes/NO NAME/Simulations/1M01Z']
+#sim_path = ['/Users/nunina/MESA/Simulations/ALL/def/1M1Z_hr']
+sim_path = ['/Volumes/NO NAME/Simulations/1M01Z/normal']
 
 stages_separated = gfm.generate_file_models(sim_path[0])
 each_stage = {}
@@ -25,7 +25,7 @@ file_models = gfm.generate_multiple_sim(sim_path)
 all_data = mh.merge_all_data(file_models)
 
 fig = plt.figure(constrained_layout = True)
-fig.suptitle('HR diagram of a $1M_\odot$, $1Z_\odot$ star')
+fig.suptitle('HR diagram of a $1M_\odot$, $0.1Z_\odot$ star')
 spec = gridspec.GridSpec(ncols=1, nrows=1, figure=fig)
 ax = fig.add_subplot(spec[:, :])
 ax.invert_xaxis()

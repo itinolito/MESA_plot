@@ -8,7 +8,7 @@ from astropy import constants as ct
 
 plt.style.use('/Users/nunina/MESA/Simulations/MESA_plot/aesthetic.mplstyle')
 
-history=False
+history=True
 
 def get_file(file,model):
     if history:
@@ -99,6 +99,7 @@ def aggregate_data(stages):
     else:    
         for stage in stages:
             folder_name = stage['name']
+            print(stage['folder_path'])
             all_parameters[folder_name] = {}
             for model in stage['models']:
                 mesa_param_obj = get_file(stage['folder_path'],model)
@@ -131,8 +132,9 @@ def merge_all_data(file_models):
 
 def radius_time(data, name, plt):
     plt.set_yscale("log")
-    plt.plot(data['age'],data['radius'], label = "{stage}".format(stage=name))
-    plt.set_ylabel("$r/R_\odot$")
+    plt.plot(data['age'],data['radius'], label = "{stage}".format(stage=name), zorder=0)
+    plt.fill_between(data['age'],data['radius'], 0, alpha=.1)
+    #plt.set_ylabel("$r/R_\odot$")
 
 def beautiful_radius_time(data, name, plt):
     plt.set_yscale("log")
@@ -160,21 +162,9 @@ def lum_time(data, name, plt):
     plt.set_ylabel("$\log_{\ 10}(L/L_\odot)$ ")
 
 def lum_temp_hr(data, name, plt):
-#    age = data['age']
-#    num_of_points = len(age)
-#    indices = list(np.logspace(start=1,stop=12,num=6, base=2, endpoint=True, dtype=np.int32))
-#    if name == 'Partially stripped - retain 0.2M':
-#        end_indices = list(range(max(num_of_points-520,0),max(num_of_points-450,0) + 1,3))
-#    else:
-#        end_indices = list(range(num_of_points-50,num_of_points+ 1,5))
-#    indices = end_indices + indices
-#    indices = [ind for ind in indices if ind < len(age)]
-    plt.plot(data['log_Teff'],data['log_luminosity'], label = "{stage}".format(stage=name))#, marker='.', markevery=indices)
-#    for i in indices[::2]:
-#        plt.text(data['log_Teff'][i],data['log_luminosity'][i],"{:.4}".format(age[i]/1e10))
-    #plt.set_ylabel("$\log_{\ 10}(L/L_\odot)$ ")
-    #plt.set_xlabel("$\log_{10} T_{\\textit{eff}}$ ")
-    plt.legend(fontsize="xx-small")
+    plt.plot(data['log_Teff'],data['log_luminosity'], label = "{stage}".format(stage=name), lw=0.5, zorder=0)#, marker='.', markevery=indices)
+    
+    plt.invert_xaxis()
 
 def nuc_time(data, name, plt):
     plt.set_yscale("log")
@@ -344,7 +334,7 @@ def plot_profile_mass(file_models,labeldata):
     fig.suptitle('Profiles')
     #spec = gridspec.GridSpec(ncols=3, nrows=3, figure=fig)
     ax1 = fig.add_subplot(2,1,1)
-    ax2 = fig.add_subplot(2,1,2)
+    ax2 = fig.add_subplot(2,1,2, sharex=ax1)
 
     #ax1 = fig.add_subplot(spec[0, :])
     #ax2 = fig.add_subplot(spec[1, :])
@@ -361,9 +351,9 @@ def plot_profile_mass(file_models,labeldata):
                 density_mass(data,model,my_label,ax1)
                 radius_mass(data,model,my_label,ax2)
     handles, labels = ax1.get_legend_handles_labels()
-    leg = fig.legend(handles, labels, fontsize="x-small", loc="right")
-    fig.subplots_adjust(right=0.8)
-    fig.supxlabel('m [$M_\odot$]')
+    leg = fig.legend(handles, labels, fontsize="x-small", ncol = 4, loc="lower center", bbox_to_anchor=(0.5,0))
+    fig.subplots_adjust(bottom=0.2)
+    ax2.set_xlabel('$m/M_\odot$')
     fig.suptitle('Profiles for '+all_labels[1])
     for legobj in leg.legendHandles:
         legobj.set_linewidth(1.5)

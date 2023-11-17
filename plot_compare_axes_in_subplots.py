@@ -21,7 +21,7 @@ if number_of_plots % 3 != 0:
 position = range(1,number_of_plots+1)
 
 plt.rcParams['figure.constrained_layout.use'] = True
-plt.rcParams['figure.figsize'] = (8,10)
+plt.rcParams['figure.figsize'] = (4,7)
 
 
 fig = plt.figure()
