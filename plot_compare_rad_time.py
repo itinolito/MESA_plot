@@ -14,7 +14,8 @@ comp = 'he'
 data = pd.read_csv('/Users/nunina/MESA/Simulations/ALL/def/tables/'+comp+'_comparison.csv')
 
 number_of_plots = data['plot number'].max()+1
-num_columns = 3
+number_of_plots = 6
+num_columns = 2
 rows = number_of_plots // num_columns
 if number_of_plots % num_columns != 0:
     rows += 1

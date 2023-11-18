@@ -10,7 +10,7 @@ from find_functions import *
 #---------------------PROGRAM---------------------#
 
 local_sim = '/Volumes/NO NAME/Simulations/'
-mass_folders = ['1M01Z', '1.5M01Z', '2M01Z', '3M01Z']
+mass_folders = ['0.7M01Z', '1M01Z', '1.5M01Z', '2M01Z', '3M01Z']
 
 data_to_plot = {}
 normal_data = {}

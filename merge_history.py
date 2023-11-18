@@ -162,9 +162,10 @@ def lum_time(data, name, plt):
     plt.set_ylabel("$\log_{\ 10}(L/L_\odot)$ ")
 
 def lum_temp_hr(data, name, plt):
-    plt.plot(data['log_Teff'],data['log_luminosity'], label = "{stage}".format(stage=name), lw=0.5, zorder=0)#, marker='.', markevery=indices)
-    
-    plt.invert_xaxis()
+    if name=="070m":
+        plt.plot(data['log_Teff'],data['log_luminosity'], label = "{stage}".format(stage=name), lw=1, c="black", zorder=0)#, marker='.', markevery=indices)
+    else:
+        plt.plot(data['log_Teff'],data['log_luminosity'], label = "{stage}".format(stage=name), lw=0.7, zorder=0)#, marker='.', markevery=indices)
 
 def nuc_time(data, name, plt):
     plt.set_yscale("log")
@@ -280,8 +281,13 @@ def radius_mass(data,model,name,plt):
 
 def density_mass(data,model,name,plt):
 #    plt.set_title("Density profile of a $1M_\odot$ ZAMS red giant")
-    plt.plot(data['mass'],data['log_density'], label=name, lw=0.8)
-    plt.set_ylabel("$\log_{\ 10} \; \left(\\rho/\\rho_\odot\\right)$")
+    if name == "Main Sequence":
+        plt.plot(data['mass'],data['log_density'], label=name, c='black', lw=1)
+
+    else:
+        plt.plot(data['mass'],data['log_density'], label=name, lw=0.8)
+
+    
      
 def elements_mass(data,model,name,plt):
 #    plt.set_title("Elements for model {}".format(model))
@@ -352,7 +358,7 @@ def plot_profile_mass(file_models,labeldata):
                 radius_mass(data,model,my_label,ax2)
     handles, labels = ax1.get_legend_handles_labels()
     leg = fig.legend(handles, labels, fontsize="x-small", ncol = 4, loc="lower center", bbox_to_anchor=(0.5,0))
-    fig.subplots_adjust(bottom=0.2)
+    fig.subplots_adjust(bottom=0.25)
     ax2.set_xlabel('$m/M_\odot$')
     fig.suptitle('Profiles for '+all_labels[1])
     for legobj in leg.legendHandles:
@@ -466,13 +472,15 @@ def one_profile_plot(file_models, profile):
 #----
 
 def label_parser(string, data):
-    if "normal" in string:
+    # import ipdb; ipdb.set_trace()
+    if "normal" in string and "0.7M01Z" not in string:
         pieces = string.split("/")
-        row_name = pieces[1]+'/050he/normal'
+        row_name = pieces[0]+'/050he/normal'
         row_data = data[data["Path"] == row_name]
-    else:
+    elif "0.7M01Z" not in string:
         row_data = data[data["Path"] == string]
-    #import ipdb; ipdb.set_trace()
+    else:
+        return "070m"
     total_mass = float(row_data['Total mass'])
     core_mass = float(row_data['Core mass'])
     progenitor_mass = float(row_data['Progenitor mass'])
@@ -497,3 +505,4 @@ def alt_label_parser(string, data):
     label = "".join(dot_label.split("."))
     common_label = "{:.1f}$M_\odot$ stripped at {:.2f} He fraction".format(progenitor_mass,he)
     return label, common_label
+

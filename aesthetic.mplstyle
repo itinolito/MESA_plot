@@ -28,7 +28,7 @@ axes.spines.left : True
 #["ffd700", "ffb14e", "fa8775", "ea5f94", "cd34b5", "9d02d7", "0000ff","4a4848", "000000"]
 #["569c9d", "899c40", "bf983d", "d77f48", "da7462", "da6362", "b87b9d", "e396ae"]
 
-
+#normal: cycler('color', ["006b87","569d8b","899c40","dbb45a","f57d26","d1001a","9c3c76","d0a1bb","e982be"])
 
 # LINES
 axes.prop_cycle : cycler('color', ["006b87","569d8b","899c40","dbb45a","f57d26","d1001a","9c3c76","d0a1bb","e982be"]) #+ cycler('ls', ['-', '--', ':', '-.'])

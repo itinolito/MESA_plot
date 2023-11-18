@@ -21,6 +21,10 @@ def filtered_rows(data, axis_row, axis_filtered, row_data, filter_range, eps):
     data_filtered = rows[rows[axis_filtered].between(filter_range-eps,filter_range+eps)]
     return data_filtered
 
+def values_in_column_equal(col):
+    arr = col.to_numpy()
+
+    return (arr[0] == arr).all()
 
 def ax_comparison(data, comparison_dictionary, name):
     
@@ -37,12 +41,17 @@ def ax_comparison(data, comparison_dictionary, name):
             filtered_data = filtered_rows(data, axis_row, axis_filtered, ax1, ax2, eps)
             if filtered_data.shape[0] < 2:
                 continue
-
+            if values_in_column_equal(filtered_data['Progenitor mass']) and values_in_column_equal(filtered_data['Total mass']):
+                continue
             filtered_data["plot number"] = counter
-            all_filtered_data = pd.concat([all_filtered_data, filtered_data])
+            all_filtered_data = pd.concat([all_filtered_data, filtered_data.sort_values(by='Total mass',ascending=False)])
             if not filtered_data.empty:
                 counter += 1
     
     all_filtered_data.to_csv('/Users/nunina/MESA/Simulations/ALL/def/tables/'+name+'_comparison.csv', mode='w')
 
 
+def alt_filtered_rows(data, axis_row, filter_range, eps):
+    rows_filtered = data[data[axis_row].between(filter_range-eps,filter_range+eps)]
+
+    return rows_filtered.sort_values(by="Total mass", ascending=False)

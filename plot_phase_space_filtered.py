@@ -27,10 +27,13 @@ comp = 'he'
 #Create csv data
 ax_comparison(data, comparisons, comp)
 
-filtered_data = pd.read_csv('/Users/nunina/MESA/Simulations/ALL/def/tables/'+comp+'_comparison.csv')
+#filtered_data = pd.read_csv('/Users/nunina/MESA/Simulations/ALL/def/tables/'+comp+'_comparison.csv')
 
-plot_xyz_data(ax, data)
-for i in range(filtered_data['plot number'].max()+1):
-    plot_lines(ax, filtered_data[filtered_data['plot number'] == i])
-
-plt.show()
+#plot_xyz_data(ax, data)
+#for i in range(filtered_data['plot number'].max()+1):
+#    plot_lines(ax, filtered_data[filtered_data['plot number'] == i])
+#
+#plt.title("Total mass comparison")
+#plt.savefig("/Users/nunina/MESA/Simulations/ALL/def/fig/{}_comp.png".format(comp))
+#
+#plt.show()

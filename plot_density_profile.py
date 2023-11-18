@@ -10,6 +10,8 @@ import numpy as np
 
 local_sim = '/Volumes/NO NAME/Simulations/'
 mass_folders = ['1M01Z', '1.5M01Z', '2M01Z', '3M01Z']
+mass_folders = ['3M01Z']
+
 labeldata = pd.read_csv('/Users/nunina/MESA/Simulations/ALL/def/tables/simulations.csv')
 
 plt.rcParams['figure.figsize'] = (5,5)
@@ -34,7 +36,7 @@ for mass_folder in mass_folders:
    he_folders = [path for path in os.listdir(sim_folder) if path != 'normal']
    #Iterate over helium folders to find stop folders if they exist
    for he_folder in he_folders:
-      if he_folder == "075he":
+      if he_folder == "025he":
          stop_folder = [sim_folder+he_folder+'/'+stop for stop in os.listdir(sim_folder+he_folder) if stop == 'LOGS_stop_at_RG']
          strip_folders = [sim_folder+he_folder+'/'+strip for strip in os.listdir(sim_folder+he_folder) if strip != 'LOGS_stop_at_RG' and '.mod' not in strip]
          strip_folders.sort(reverse=True)

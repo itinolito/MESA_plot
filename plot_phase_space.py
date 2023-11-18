@@ -19,9 +19,7 @@ def plot_xyz_data(ax, data):
     ydata = strip_data['Progenitor mass']
     zdata = strip_data['Total mass']
 
-    plt.title("Simulations")
-
-    ax.set_xlabel('He at stripping')
+    ax.set_xlabel('He fraction at stripping')
     ax.set_ylabel('Progenitor mass')
     ax.set_zlabel('Total mass')
 
